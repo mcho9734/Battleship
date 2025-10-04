@@ -1,0 +1,10 @@
+[tool.pytest.ini_options]
+pythonpath = "src"
+addopts = "-vv --color=yes --no-header --disable-warnings -p pytest_clarity -rNs"
+faulthandler_timeout = 10
+consider_namespace_packages = true
+
+
+[tool.pyright]
+strict = ["src"]
+exclude = ["**/__pycache__"]
