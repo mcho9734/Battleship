@@ -118,7 +118,7 @@ def test_place_ships(seed):
     result = place_ships()
 
     assert sorted(SHIP_SIZES) == sorted([len(x) for x in result]), (
-        'you did not generate ships of the correct sizes')
+        'generated ships should be of the correct sizes')
     for x in result:
         for y in result:
             if x != y:
