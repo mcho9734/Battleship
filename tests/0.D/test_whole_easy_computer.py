@@ -6,7 +6,7 @@ from tests.helpers.naming import apply_names
 
 BOARD_SIZE = 8
 
-BIG_NUMBER = 100000/2
+BIG_NUMBER = 100000//2
 OFFSET = 2000/2
 
 @pytest.mark.parametrize('seed', [
