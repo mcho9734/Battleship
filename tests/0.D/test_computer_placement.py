@@ -26,7 +26,7 @@ def test_choose_orientation_and_location(size, seed):
             orientation, location = choose_orientation_and_location(size)
         except ValueError:
             raise AssertionError(
-                "you tried to find a random number in an empty range")
+                "The function should not error. This error happened most likely because you attempted to find a random number in an empty range")
         ors.append(orientation)
         locs.append(location)
 
