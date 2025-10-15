@@ -27,4 +27,4 @@ case1.remove(((5, 6), MISS))
 ])
 def test_simple_cases(shots, valid):
     random.seed(1000)
-    assert harder_computer(shots) in valid
+    assert harder_computer(shots) in valid, "the shots chosen by harder_computer should be valid shots on the board"
