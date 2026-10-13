@@ -1,7 +1,8 @@
-import random; random
-from typing import Final
-
 from .shot import Outcome
+from typing import Final
+import random
+random
+
 
 BOARD_SIZE: Final[int] = 8
 
@@ -19,7 +20,10 @@ def get_all_shots(previous_shots: list[tuple[tuple[int, int], Outcome]],
     Returns:
         list[tuple[int, int]]: all shots from the log.
     """
-    return ...
+    allshots: list[tuple[int, int]] = []
+    for shot in previous_shots:
+        allshots.append(shot[0])
+    return allshots
 
 
 def easy_computer(previous_shots: list[tuple[tuple[int, int], Outcome]],
@@ -35,4 +39,9 @@ def easy_computer(previous_shots: list[tuple[tuple[int, int], Outcome]],
     Returns:
         tuple[int, int]: coordinate pair that represents the computer's shot
     """
-    return ...
+    nextshot = (random.randint(0, BOARD_SIZE - 1),
+                random.randint(0, BOARD_SIZE - 1))
+    while nextshot in get_all_shots(previous_shots):
+        nextshot = (random.randint(0, BOARD_SIZE - 1),
+                    random.randint(0, BOARD_SIZE - 1))
+    return nextshot

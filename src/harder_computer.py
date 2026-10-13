@@ -3,7 +3,7 @@ import random
 
 from .easy_computer import easy_computer, get_all_shots
 from .shot import Outcome
-HIT: Outcome = Outcome.HIT # type: ignore
+HIT: Outcome = Outcome.HIT  # type: ignore
 easy_computer, get_all_shots, HIT
 
 BOARD_SIZE: Final[int] = 8
@@ -23,7 +23,11 @@ def get_hits(previous_shots: list[tuple[tuple[int, int], Outcome]],
     Returns:
         list[tuple[int, int]]: all shots from the list that resulted in a HIT.
     """
-    return ...
+    hits: list[tuple[tuple[int, int], Outcome]] = []
+    for shot in previous_shots:
+        if shot[1] == HIT:
+            hits.append(shot)
+    return get_all_shots(hits)
 
 
 def is_valid_shot(shot: tuple[int, int],
@@ -42,7 +46,7 @@ def is_valid_shot(shot: tuple[int, int],
     Returns:
         bool: boolean value representing the shot's validity
     """
-    return ...
+    return 0 <= shot[0] < BOARD_SIZE and 0 <= shot[1] < BOARD_SIZE and shot not in processed_shots
 
 
 def apply_direction(coords: tuple[int, int],
@@ -60,7 +64,7 @@ def apply_direction(coords: tuple[int, int],
     Returns:
         tuple[int, int]: the new coordinate pair with direction applied to coords
     """
-    return ...
+    return (coords[0] + direction[0], coords[1] + direction[1])
 
 
 def find_opposite_shot(coords: tuple[int, int],
@@ -78,7 +82,7 @@ def find_opposite_shot(coords: tuple[int, int],
     Returns:
         tuple[int, int]: the new coordinate pair with negative direction applied to coords
     """
-    return ...
+    return (coords[0] - direction[0], coords[1] - direction[1])
 
 
 def harder_computer(previous_shots: list[tuple[tuple[int, int], Outcome]],
@@ -94,4 +98,22 @@ def harder_computer(previous_shots: list[tuple[tuple[int, int], Outcome]],
     Returns:
         tuple[int, int]: coordinate pair that represents the computer's shot
     """
-    return ...
+    hit_list = get_hits(previous_shots)
+    shot_list = get_all_shots(previous_shots)
+    directions: list[tuple[int, int]] = [(0, 1), (0, -1), (-1, 0), (1, 0)]
+    reg_cands: list[tuple[int, int]] = []
+    opp_cands: list[tuple[int, int]] = []
+    for shot in hit_list:
+        for dir in directions:
+            cand_shot = apply_direction(shot, dir)
+            opp_shot = find_opposite_shot(shot, dir)
+            if is_valid_shot(cand_shot, shot_list):
+                reg_cands.append(cand_shot)
+            # check opposite direction if cand_shot isn't valid cuz it was a previous hit.
+            elif cand_shot in hit_list and is_valid_shot(opp_shot, shot_list):
+                opp_cands.append(opp_shot)
+    if len(opp_cands) > 0:
+        return opp_cands[0]
+    elif len(reg_cands) > 0:
+        return reg_cands[0]
+    return easy_computer(previous_shots)

@@ -25,7 +25,16 @@ def choose_orientation_and_location(size: int,
             If no ship can be placed, the coordinate should be None, and the boolean is undefined
             (can be either True or False).
     """
-    return ...
+    orientation = random.choice([True, False])
+    if size > BOARD_SIZE or size <= 0:
+        return (orientation, None)
+    if orientation:  # vertical
+        coord = (random.randint(0, BOARD_SIZE - 1),
+                 random.randint(0, BOARD_SIZE - size))
+    else:  # horizontal
+        coord = (random.randint(0, BOARD_SIZE - size),
+                 random.randint(0, BOARD_SIZE - 1))
+    return (orientation, coord)
 
 
 def generate_ship_coordinates(location: tuple[int, int],
@@ -46,7 +55,14 @@ def generate_ship_coordinates(location: tuple[int, int],
     Returns:
         list[tuple[int, int]]: coordinates of generated ship
     """
-    return ...
+    ship_coords: list[tuple[int, int]] = []
+    if orientation:  # vertical
+        for square in range(size):
+            ship_coords.append((location[0], location[1] + square))
+    else:  # horizontal
+        for square in range(size):
+            ship_coords.append((location[0] + square, location[1]))
+    return ship_coords
 
 
 def is_conflict(ship: list[tuple[int, int]] | None,
@@ -64,7 +80,14 @@ def is_conflict(ship: list[tuple[int, int]] | None,
     Returns:
         bool: boolean value representing if a coordinate conflict was found
     """
-    return ...
+    if ship == None:
+        return True
+    for eachship in ships:
+        for square in eachship:
+            if square in ship:
+                return True
+    return False
+    # note: if line 89 is return ship==None and lines 83-84 are removed, if square in ship has an error (None iteration).
 
 
 def place_ship(size: int) -> list[tuple[int, int]]:
@@ -94,4 +117,10 @@ def place_ships() -> list[list[tuple[int, int]]]:
     Returns:
         list[list[tuple[int, int]]]: valid list of ships.
     """
-    return ...
+    validships: list[list[tuple[int, int]]] = []
+    for size in SHIP_SIZES:
+        ship = place_ship(size)
+        while is_conflict(ship, validships):
+            ship = place_ship(size)
+        validships.append(ship)
+    return validships
